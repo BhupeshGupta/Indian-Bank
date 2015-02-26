@@ -1,0 +1,149 @@
+{% set bank_map = doc.payin_slip_details | get_payslip_map %}
+
+
+{% set debit_entry = doc.entries | get_debit_entry %}
+
+
+<div class="container" xmlns="http://www.w3.org/1999/html">
+
+    {% for bank_account_name, jvs in bank_map.iteritems() %}
+
+        {% set bank_account = frappe.get_doc("Account", bank_account_name) %}
+
+
+        <div class="row clearfix">
+            <div class="col-xs-12 column">
+                <h3 class="text-center">
+                    Pay-in-Slip
+                </h3>
+            </div>
+        </div>
+
+        <br/>
+        <br/>
+        <br/>
+
+        <div class="row clearfix">
+            <div class="col-xs-6 column">
+                <p>
+                    <strong>Bank Name:</strong> {{ bank_account.account_name }} <br/>
+                    <strong>Account Number:</strong> {{ bank_account.account_number or '' }} <br/>
+                    <strong>Account Holder:</strong> {{ bank_account.company }} <br/>
+                </p>
+            </div>
+            <div class="col-xs-6 column">
+                <p align="text-right">
+                    <strong>Date:</strong> {{ doc.get_formatted("posting_date") }}
+                </p>
+
+            </div>
+        </div>
+
+        <br/>
+        <br/>
+
+        <div class="row clearfix">
+            <div class="col-xs-12 column">
+
+                <table class="table">
+
+                    <thead>
+                    <tr>
+                        <th>
+                            JV No.
+                        </th>
+                        <th>
+                            Received From
+                        </th>
+                        <th>
+                            Bank
+                        </th>
+                        <th>
+                            Instrument Number
+                        </th>
+                        <th>
+                            Instrument Date
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for jv in jvs %}
+                        {% set debit_entry = jv.entries | get_debit_entry %}
+                        <tr>
+                            <td>
+                                {{ jv.name }}
+                            </td>
+                            <td>
+                                {{ frappe.db.get_value("Account",  debit_entry.account, "account_name") }}
+                            </td>
+                            <td>
+                                {{ jv.reference_bank or '' }}
+                            </td>
+                            <td>
+                                {{ jv.cheque_no or '' }}
+                            </td>
+                            <td>
+                                {{ jv.cheque_date or '' }}
+                            </td>
+                            <td>
+                                {{ jv.get_formatted("total_credit") }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total</td>
+                        <td>{{ frappe.format_value(jvs | get_total_credit_for_jvs, {"fieldtype": "Currency"}, currency="INR") }}</td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+
+        <br/>
+
+        <div class="row clearfix">
+            <div class="col-xs-12 column">
+                <p>
+                    Amount (in words): {{ jvs | get_total_credit_for_jvs | money_in_words }}
+                </p>
+            </div>
+        </div>
+
+        <br/>
+        <br/>
+
+        <div class="row clearfix">
+            <div class="col-xs-6 column">
+                <p class="text-left">
+                    Deposited by
+                    </br>
+                    </br>
+                    Signature
+                </p>
+
+            </div>
+            <div class="col-xs-6 column">
+                <p class="text-right">
+                    Received by
+                    </br>
+                    </br>
+                    Signature
+                </p>
+            </div>
+        </div>
+
+        <div class="page-break"></div>
+
+    {% endfor %}
+
+</div>

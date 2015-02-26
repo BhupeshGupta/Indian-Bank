@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include indian_banks *.css
+recursive-include indian_banks *.csv
+recursive-include indian_banks *.html
+recursive-include indian_banks *.ico
+recursive-include indian_banks *.js
+recursive-include indian_banks *.json
+recursive-include indian_banks *.md
+recursive-include indian_banks *.png
+recursive-include indian_banks *.py
+recursive-include indian_banks *.svg
+recursive-include indian_banks *.txt
+recursive-exclude indian_banks *.pyc
