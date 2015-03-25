@@ -1,0 +1,165 @@
+"Data Import Template"
+"Table:","Print Format"
+""
+""
+"Notes:"
+"Please do not change the template headings."
+"First data column must be blank."
+"If you are uploading new records, leave the ""name"" (ID) column blank."
+"If you are uploading new records, ""Naming Series"" becomes mandatory, if present."
+"Only mandatory fields are necessary for new records. You can delete non-mandatory columns if you wish."
+"For updating, you can update only selective columns."
+"You can only upload upto 5000 records in one go. (may be less in some cases)"
+""
+"DocType:","Print Format","","","","","",""
+"Column Labels:","ID","DocType","Module","Standard","Print Format Type","Disabled","HTML"
+"Column Name:","name","doc_type","module","standard","print_format_type","disabled","html"
+"Mandatory:","Yes","Yes","Yes","Yes","No","No","No"
+"Type:","Data (text)","Link","Link","Select","Select","Check","Code"
+"Info:","","Valid DocType","Valid Module Def","One of: No, Yes","One of: Server, Client","0 or 1",""
+"Start entering data below this line"
+"","""Payin Slip""","Payin Slip","Indian Banks","Yes","Server",0,"{% set bank_map = doc.payin_slip_details | get_bank_map %}
+
+<div class=""container"" xmlns=""http://www.w3.org/1999/html"">
+
+    {% for bank_account_name, jvs in bank_map.iteritems() %}
+
+        {% set bank_account = frappe.get_doc(""Account"", bank_account_name) %}
+
+
+        <div class=""row clearfix"">
+            <div class=""col-xs-12 column"">
+                <h3 class=""text-center"">
+                    Pay-in-Slip
+                </h3>
+            </div>
+        </div>
+
+        <br/>
+        <br/>
+        <br/>
+
+        <div class=""row clearfix"">
+            <div class=""col-xs-6 column"">
+                <p>
+                    <strong>Bank Name:</strong> {{ bank_account.account_name }} <br/>
+                    <strong>Account Number:</strong> {{ bank_account.account_number or '' }} <br/>
+                    <strong>Account Holder:</strong> {{ bank_account.company }} <br/>
+                </p>
+            </div>
+            <div class=""col-xs-6 column"">
+                <p align=""text-right"">
+                    <strong>Date:</strong> {{ doc.get_formatted(""posting_date"") }}
+                </p>
+
+            </div>
+        </div>
+
+        <br/>
+        <br/>
+
+        <div class=""row clearfix"">
+            <div class=""col-xs-12 column"">
+
+                <table class=""table"">
+
+                    <thead>
+                    <tr>
+                        <th>
+                            JV No.
+                        </th>
+                        <th>
+                            Received From
+                        </th>
+                        <th>
+                            Bank
+                        </th>
+                        <th>
+                            Instrument Number
+                        </th>
+                        <th>
+                            Instrument Date
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for jv in jvs %}
+                        {% set credit_entry = jv.entries | get_credit_entry %}
+                        <tr>
+                            <td>
+                                {{ jv.name }}
+                            </td>
+                            <td>
+                                {{ frappe.db.get_value(""Account"",  credit_entry.account, ""account_name"") }}
+                            </td>
+                            <td>
+                                {{ jv.reference_bank or '' }}
+                            </td>
+                            <td>
+                                {{ jv.cheque_no or '' }}
+                            </td>
+                            <td>
+                                {{ jv.cheque_date or '' }}
+                            </td>
+                            <td>
+                                {{ jv.get_formatted(""total_credit"") }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total</td>
+                        <td>{{ frappe.format_value(jvs | get_total_credit_for_jvs, {""fieldtype"": ""Currency""}, currency=""INR"") }}</td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+
+        <br/>
+
+        <div class=""row clearfix"">
+            <div class=""col-xs-12 column"">
+                <p>
+                    Amount (in words): {{ jvs | get_total_credit_for_jvs | money_in_words }}
+                </p>
+            </div>
+        </div>
+
+        <br/>
+        <br/>
+
+        <div class=""row clearfix"">
+            <div class=""col-xs-6 column"">
+                <p class=""text-left"">
+                    Deposited by
+                    </br>
+                    </br>
+                    Signature
+                </p>
+
+            </div>
+            <div class=""col-xs-6 column"">
+                <p class=""text-right"">
+                    Received by
+                    </br>
+                    </br>
+                    Signature
+                </p>
+            </div>
+        </div>
+
+        <div class=""page-break""></div>
+
+    {% endfor %}
+
+</div>"

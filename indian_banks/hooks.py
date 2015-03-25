@@ -113,8 +113,8 @@ doctype_list_js = {
 }
 
 jenv_filter = [
-	'get_debit_entry:indian_banks.jinja_filters.get_debit_entry',
+	'get_credit_entry:indian_banks.jinja_filters.get_credit_entry',
 	'money_in_words:indian_banks.jinja_filters.money_in_words',
-	'get_payslip_map:indian_banks.jinja_filters.get_payslip_map',
+	'get_bank_map:indian_banks.jinja_filters.get_bank_map',
 	'get_total_credit_for_jvs:indian_banks.jinja_filters.get_total_credit_for_jvs'
 ]

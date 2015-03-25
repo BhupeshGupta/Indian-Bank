@@ -2,20 +2,20 @@ from frappe.utils import data
 import frappe
 
 
-def get_debit_entry(entries):
+def get_credit_entry(entries):
 	for entry in entries:
-		if entry.debit > 0:
+		if entry.credit > 0:
 			return entry
 
 
-def get_payslip_map(payment_details):
+def get_bank_map(payment_details):
 	jvs = [x.jv for x in payment_details]
 
 	map = {}
 	for jv in jvs:
 		jv_object = frappe.get_doc("Journal Voucher", jv)
 		for entry in jv_object.entries:
-			if entry.credit > 0:
+			if entry.debit > 0:
 				map.setdefault(entry.account, [])
 				map[entry.account].append(jv_object)
 				break
