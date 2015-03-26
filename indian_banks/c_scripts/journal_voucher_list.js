@@ -45,7 +45,7 @@ frappe.listview_settings['Journal Voucher'].onload = function (me) {
                 method: save_opts.method,
                 args: save_opts.args,
                 callback: function (r) {
-                    var w = window.open("/api/method/frappe.templates.pages.print.download_pdf?"
+                    var w = window.open("/print?"
                         + "doctype=" + encodeURIComponent('Payin Slip')
                         + "&name=" + encodeURIComponent(r.docs[0].name)
                         + "&format=" + encodeURIComponent('Payin Slip')
