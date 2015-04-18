@@ -1,7 +1,4 @@
 frappe.listview_settings['Journal Voucher'].onload = function (me) {
-
-    console.log("JV list ran");
-
     me.appframe.add_primary_action(__("Print Cheque/DD Deposit Slip"), function () {
         var selected = me.get_checked_items() || [];
 
@@ -21,6 +18,7 @@ frappe.listview_settings['Journal Voucher'].onload = function (me) {
             }
             if (d.voucher_type != 'Bank Voucher') {
                 msgprint(__("Journal Voucher's must be of type 'Bank Voucher'."));
+	            return
             }
         }
 
