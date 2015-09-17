@@ -15,7 +15,7 @@ class PayinSlip(Document):
         WHERE name IN ({jvs}) and docstatus != 1
         """.format(jvs=', '.join(['"{}"'.format(d.jv) for d in self.payin_slip_details])))
 
-		if jvs_not_submitted:
-			frappe.throw(_("JV's needs to be submitted before they can be printed. Following are not \n{}").format(
-				comma_and([result[0] for result in jvs_not_submitted]))
-			)
+		# if jvs_not_submitted:
+		# 	frappe.throw(_("JV's needs to be submitted before they can be printed. Following are not \n{}").format(
+		# 		comma_and([result[0] for result in jvs_not_submitted]))
+		# 	)
