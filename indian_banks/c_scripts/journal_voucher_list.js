@@ -12,10 +12,10 @@ frappe.listview_settings['Journal Voucher'].onload = function (me) {
         // Select only submitted jv's
         for (var i in selected) {
             var d = selected[i];
-            if (d.docstatus != 1) {
-                msgprint(__("Journal Voucher's must be Submitted. " + d.name + " is not submitted"));
-                return
-            }
+            //if (d.docstatus != 1) {
+            //    msgprint(__("Journal Voucher's must be Submitted. " + d.name + " is not submitted"));
+            //    return
+            //}
             if (d.voucher_type != 'Bank Voucher') {
                 msgprint(__("Journal Voucher's must be of type 'Bank Voucher'."));
 	            return
